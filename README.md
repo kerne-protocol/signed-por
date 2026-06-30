@@ -191,6 +191,26 @@ If you ship a deployment, open a PR adding it to the list below.
 
 ---
 
+## Have it produced for you
+
+The format and this verifier are free and vendor-neutral, and you never need
+anyone's help to use them: the producer side is a few lines in whatever reporting
+job you already run, and the [spec](./SPEC.md) gives Python and JavaScript
+references. If you would rather have the signed read produced for you, Kerne
+(reference deployment #1, and the maintainer of this repo) offers it as a paid
+service. It emits attestations in this same format, verifiable with this same tool
+by anyone you share the attestation with:
+
+- A self-serve signed read of any single public address: <https://kerne.fi/address-read> ($149)
+- A signed proof-of-reserves snapshot of your own reserves: <https://kerne.fi/proof-of-reserves> ($1,500)
+- An independent signed read of a counterparty's public reserves, commissioned by you: <https://kerne.fi/counterparty-verification> ($2,500)
+
+This is attestation tooling, not an audit and not a solvency opinion, the same
+scope as a PASS above. You can verify any attestation, including one you produce
+yourself from the spec, free and in your browser at <https://kerne.fi/verify>.
+
+---
+
 ## Develop
 
 ```sh
