@@ -11,8 +11,9 @@
 // `recoverPersonalSign` recovers the Ethereum address that produced such a
 // signature. It is implemented on @noble/curves (the same audited secp256k1
 // implementation that ethers and viem build on) so that a verifier never has to
-// pull in a full wallet SDK. The two @noble packages are independently audited
-// and have zero transitive dependencies of their own.
+// pull in a full wallet SDK. The two @noble packages are independently audited;
+// @noble/hashes has no dependencies and @noble/curves depends only on
+// @noble/hashes, so the install closure is just those two.
 //
 // Fail closed: every malformed, wrong-length, non-canonical, or tampered input
 // resolves to `null`. A caller that treats `null` (or a mismatch) as
