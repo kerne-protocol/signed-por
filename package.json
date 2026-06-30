@@ -1,0 +1,75 @@
+{
+  "name": "signed-por",
+  "version": "0.1.0",
+  "description": "A tiny, vendor-neutral verifier for Signed Proof-of-Reserves attestations: EIP-191 signature recovery, canonical number-binding, and freshness, with a CLI and a zero-config reference verifier. No wallet SDK, no backend.",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "signed-por": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "src",
+    "examples/kerne-attestation.json",
+    "SPEC.md",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
+    "test": "npm run build && node --test",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run clean && npm run build && node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@noble/curves": "^1.9.7",
+    "@noble/hashes": "^1.8.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.0",
+    "typescript": "^5.6.0"
+  },
+  "keywords": [
+    "proof-of-reserves",
+    "proof-of-reserve",
+    "por",
+    "attestation",
+    "eip-191",
+    "personal-sign",
+    "secp256k1",
+    "signature-verification",
+    "stablecoin",
+    "synthetic-dollar",
+    "solvency",
+    "reserves",
+    "transparency",
+    "defi",
+    "ethereum"
+  ],
+  "license": "MIT",
+  "author": "Kerne Protocol <kerne.systems@protonmail.com>",
+  "homepage": "https://github.com/kerne-protocol/signed-por#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kerne-protocol/signed-por.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kerne-protocol/signed-por/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
