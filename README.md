@@ -50,6 +50,12 @@ package is the reference implementation of it.
 npm install signed-por
 ```
 
+Or install the latest straight from source:
+
+```sh
+npm install github:kerne-protocol/signed-por
+```
+
 Requires Node 18 or newer. Two direct dependencies, both audited:
 [`@noble/curves`](https://github.com/paulmillr/noble-curves) (secp256k1 recovery)
 and [`@noble/hashes`](https://github.com/paulmillr/noble-hashes) (SHA-256 and
