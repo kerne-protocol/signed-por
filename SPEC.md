@@ -297,10 +297,11 @@ A **conforming verifier** MUST:
 
 ## 10. Reference implementation
 
-The npm package and repository `signed-por` are the reference verifier for this
-spec: a dependency-light TypeScript implementation (EIP-191 recovery on audited
-`@noble` primitives, SHA-256 binding, freshness), a CLI, and a conformance test
-suite that includes verification of a live production attestation.
+The `signed-por` repository (github.com/kerne-protocol/signed-por) is the
+reference verifier for this spec: a dependency-light TypeScript implementation
+(EIP-191 recovery on audited `@noble` primitives, SHA-256 binding, freshness), a
+CLI, and a conformance test suite that includes verification of a live production
+attestation. Install it with `npm install github:kerne-protocol/signed-por`.
 
 The first production deployment of this format is Kerne
 (`https://kerne.fi/api/por/signed`), which is the source of the

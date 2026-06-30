@@ -3,8 +3,8 @@
 **A tiny, vendor-neutral verifier for signed proof-of-reserves attestations.**
 
 [![ci](https://github.com/kerne-protocol/signed-por/actions/workflows/ci.yml/badge.svg)](https://github.com/kerne-protocol/signed-por/actions/workflows/ci.yml)
-[![npm](https://img.shields.io/npm/v/signed-por.svg)](https://www.npmjs.com/package/signed-por)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+[![spec](https://img.shields.io/badge/spec-v1.0.0--draft-informational.svg)](./SPEC.md)
 
 A stablecoin or synthetic-dollar issuer can sign a reserve snapshot so that
 anyone can check it without trusting an intermediary: no attestor, no oracle, no
@@ -46,15 +46,15 @@ package is the reference implementation of it.
 
 ## Install
 
-```sh
-npm install signed-por
-```
-
-Or install the latest straight from source:
+Install straight from this repository:
 
 ```sh
 npm install github:kerne-protocol/signed-por
 ```
+
+It installs under the package name `signed-por`, so you import it as
+`from 'signed-por'` and the `signed-por` command is on your local path. No
+registry account or configuration is needed.
 
 Requires Node 18 or newer. Two direct dependencies, both audited:
 [`@noble/curves`](https://github.com/paulmillr/noble-curves) (secp256k1 recovery)
@@ -73,7 +73,7 @@ Verify a live endpoint over the network. This checks a real production
 attestation end to end:
 
 ```sh
-npx signed-por verify \
+npx github:kerne-protocol/signed-por verify \
   --url https://kerne.fi/api/por/signed \
   --signer 0x09a2780ac8Be6D5d2d1F85A8D92b09D40C9CA37e
 ```
