@@ -167,6 +167,52 @@ trust, not a replacement for reading the numbers.
 
 ---
 
+## Verifying without this package: the one classic pitfall
+
+You do not need this package to verify. Any EIP-191 library works, with one
+rule: **the signature is over the 32 raw bytes of `attestation_hash`, not over
+the 66-character hex string.** If you encode the hash string as UTF-8 text, you
+compute a different EIP-191 digest and recover a different, plausible-looking
+address from a perfectly valid signature. An honest verifier who takes that
+path will conclude a correct attestation is a forgery. If your recovered
+address does not match the expected signer, check this first before concluding
+anything.
+
+Correct in ethers v6 (`getBytes`, never the bare string):
+
+```js
+import { verifyMessage, getBytes } from "ethers";
+
+const j = await (await fetch("https://kerne.fi/api/por/signed")).json();
+const recovered = verifyMessage(getBytes(j.attestation_hash), j.signature);
+// WRONG: verifyMessage(j.attestation_hash, j.signature)
+// hashes the hex string as text and recovers the wrong address.
+```
+
+Correct in Python eth_account (`hexstr=`, never `text=`):
+
+```python
+import requests
+from eth_account import Account
+from eth_account.messages import encode_defunct
+
+j = requests.get("https://kerne.fi/api/por/signed").json()
+msg = encode_defunct(hexstr=j["attestation_hash"])  # raw bytes
+# WRONG: encode_defunct(text=j["attestation_hash"]) recovers the wrong signer.
+recovered = Account.recover_message(msg, signature=j["signature"])
+```
+
+Foundry cast handles the conversion natively:
+
+```sh
+cast wallet verify --address <expected-signer> <attestation_hash> <signature>
+```
+
+This package always verifies over raw bytes; the pitfall exists only on the
+DIY path, which is why it is written down here.
+
+---
+
 ## Adopt the format
 
 If you issue a stablecoin or synthetic dollar and want self-verifiable reserves,
