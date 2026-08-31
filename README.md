@@ -65,6 +65,11 @@ which dedupes. There are no third-party transitive dependencies. These are the
 same primitives ethers and viem build on. There is no wallet SDK, no network
 access in the library, and no framework.
 
+The package is ES modules only. Use `import`, not `require`: there is no
+CommonJS build, and `require('signed-por')` fails with
+`ERR_PACKAGE_PATH_NOT_EXPORTED`. The `signed-por` command itself works from any
+project, ESM or not.
+
 ---
 
 ## Quickstart: the CLI
