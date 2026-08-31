@@ -20,6 +20,7 @@
     "dist",
     "src",
     "examples/kerne-attestation.json",
+    "examples/kerne-attestation-v9.json",
     "SPEC.md",
     "README.md",
     "LICENSE"

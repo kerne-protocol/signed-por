@@ -304,9 +304,15 @@ CLI, and a conformance test suite that includes verification of a live productio
 attestation. Install it with `npm install github:kerne-protocol/signed-por`.
 
 The first production deployment of this format is Kerne
-(`https://kerne.fi/api/por/signed`), which is the source of the
-`examples/kerne-attestation.json` fixture in this repository. The format is
-vendor-neutral; additional reference deployments are welcome.
+(`https://kerne.fi/api/por/signed`), which is the source of the two real
+fixtures in this repository: `examples/kerne-attestation.json`, captured
+2026-06-30 at producer `schema_version` 4, and
+`examples/kerne-attestation-v9.json`, captured 2026-08-31 at producer
+`schema_version` 9. Both verify under the same code, which is the intended
+property: `schema_version` is payload data and carries no meaning to a
+verifier, so a producer may evolve its payload without breaking pinned
+consumers. The format is vendor-neutral; additional reference deployments are
+welcome.
 
 ---
 

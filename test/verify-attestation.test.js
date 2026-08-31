@@ -195,3 +195,62 @@ test('real production attestation: a wrong expected signer fails', () => {
   assert.equal(v.signerMatchesExpected, false);
   assert.equal(v.verified, false);
 });
+
+// --- Fixture 3: a second real attestation, five schema revisions later --------
+// Captured from the same production endpoint on 2026-08-31 at schema_version 9,
+// where fixture 2 is schema_version 4 from 2026-06-30. Nothing in the verifier
+// knows about either schema. Keeping both proves the verification surface is
+// the wire envelope, not the payload shape: an issuer can add, rename or drop
+// payload fields across versions and a pinned verifier keeps working.
+const KERNE_V9 = JSON.parse(
+  readFileSync(fileURLToPath(new URL('../examples/kerne-attestation-v9.json', import.meta.url)), 'utf8'),
+);
+
+test('second production attestation (schema 9): signer recovers and figures bind', () => {
+  const bound = JSON.parse(KERNE_V9.signed_payload_canonical);
+  const nowMs = (bound.timestamp + 60) * 1000;
+  const v = verifyAttestation(KERNE_V9, { expectedSigner: KERNE_SIGNER, now: nowMs });
+  assert.equal(v.signatureValid, true, 'production signature must recover');
+  assert.equal(v.signerMatchesExpected, true, `recovered ${v.recoveredSigner}, expected ${KERNE_SIGNER}`);
+  assert.equal(v.hashMatches, true, 'production figures must bind to the signed hash');
+  assert.equal(v.isFresh, true);
+  assert.equal(v.verified, true, v.reason ?? 'expected production PASS');
+});
+
+test('second production attestation (schema 9): editing one byte of the canonical breaks binding', () => {
+  const bound = JSON.parse(KERNE_V9.signed_payload_canonical);
+  const nowMs = (bound.timestamp + 60) * 1000;
+  const tampered = {
+    ...KERNE_V9,
+    // aggregate_solvency_usd_ratio, which occurs exactly once in the canonical
+    signed_payload_canonical: KERNE_V9.signed_payload_canonical.replace('1.021808', '9.999999'),
+  };
+  assert.notEqual(tampered.signed_payload_canonical, KERNE_V9.signed_payload_canonical, 'tamper must actually change the canonical');
+  const v = verifyAttestation(tampered, { expectedSigner: KERNE_SIGNER, now: nowMs });
+  assert.equal(v.hashMatches, false);
+  assert.equal(v.verified, false);
+});
+
+test('the two production fixtures are different snapshots at different schema versions', () => {
+  assert.equal(KERNE.schema_version, 4);
+  assert.equal(KERNE_V9.schema_version, 9);
+  assert.notEqual(KERNE.attestation_hash, KERNE_V9.attestation_hash);
+  assert.notEqual(KERNE.signature, KERNE_V9.signature);
+  // Same pinned key across both, which is what a consumer actually pins.
+  assert.equal(KERNE.signer.toLowerCase(), KERNE_V9.signer.toLowerCase());
+});
+
+test('a verifier passes an attestation whose own status field is a warning', () => {
+  // The producer's status is payload data, not a verdict this library issues.
+  // Fixture 3 carries status WARNING_DELTA and still verifies, because what is
+  // verified is authenticity, number-binding and freshness, never whether the
+  // issuer is solvent or safe. A verifier that gated on a payload field would
+  // be reading the issuer's own opinion back as if it were a check.
+  assert.equal(KERNE_V9.status, 'WARNING_DELTA');
+  const bound = JSON.parse(KERNE_V9.signed_payload_canonical);
+  const v = verifyAttestation(KERNE_V9, {
+    expectedSigner: KERNE_SIGNER,
+    now: (bound.timestamp + 60) * 1000,
+  });
+  assert.equal(v.verified, true);
+});

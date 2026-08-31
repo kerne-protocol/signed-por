@@ -104,14 +104,40 @@ accept an authentic, number-bound snapshot that is past its freshness window
 (useful for checking a historical capture), and `--now <unixSeconds>` to verify
 against a fixed time. Run `signed-por verify --help` for everything.
 
-From a clone of this repo, verify the bundled real attestation offline (it is a
-historical capture, so `--allow-stale` accepts the authentic, number-bound
+From a clone of this repo, verify either bundled real attestation offline (both
+are historical captures, so `--allow-stale` accepts an authentic, number-bound
 snapshot past its freshness window):
 
 ```sh
 signed-por verify examples/kerne-attestation.json \
   --signer 0x09a2780ac8Be6D5d2d1F85A8D92b09D40C9CA37e --allow-stale
+
+signed-por verify examples/kerne-attestation-v9.json \
+  --signer 0x09a2780ac8Be6D5d2d1F85A8D92b09D40C9CA37e --allow-stale
 ```
+
+### Two fixtures, five schema revisions apart
+
+`examples/kerne-attestation.json` was captured on 2026-06-30 at the producer's
+`schema_version` 4. `examples/kerne-attestation-v9.json` was captured on
+2026-08-31 at `schema_version` 9, from the same endpoint and the same signing
+key. Between them the payload gained, renamed and reorganised fields.
+
+Both verify under the same pinned code, because this library never reads the
+payload shape. It recovers a signer, binds a hash and checks a clock, and the
+payload is opaque to all three. That is the property worth testing against real
+captures rather than against fixtures this repo generated for itself, and it is
+why the older one is kept rather than replaced.
+
+The second fixture carries `"status": "WARNING_DELTA"` and it still verifies.
+`status` is the issuer's own field, sitting inside data this library treats as
+opaque. A verifier that failed on it would be reporting the issuer's opinion
+back as if it were a cryptographic check. What is verified is authenticity,
+number-binding and freshness. Nothing here is a verdict on whether an issuer is
+solvent, hedged or safe to hold.
+
+Last confirmed against the live producer endpoint on 2026-08-31: the CLI above,
+run against `https://kerne.fi/api/por/signed`, returns `[PASS]` and exit code 0.
 
 ---
 
