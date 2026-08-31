@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// SPDX-License-Identifier: MIT
 // signed-por command-line verifier.
 //
 //   signed-por verify <file.json> --signer 0xABC...

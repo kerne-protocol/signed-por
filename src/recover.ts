@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // EIP-191 personal_sign signer recovery.
 //
 // A Signed Proof-of-Reserves attestation is signed with the standard EIP-191

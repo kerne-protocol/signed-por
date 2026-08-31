@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // The Signed Proof-of-Reserves verifier.
 //
 // Given a published attestation it answers three independent questions and then

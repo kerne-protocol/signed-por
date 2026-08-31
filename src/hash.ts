@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // SHA-256 of a UTF-8 string, as a 0x-prefixed hex digest.
 //
 // This is the exact hash a Signed Proof-of-Reserves producer applies to the

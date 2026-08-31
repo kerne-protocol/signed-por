@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // signed-por: a tiny, vendor-neutral verifier for Signed Proof-of-Reserves
 // attestations. See SPEC.md for the format and README.md for the project intent.
 //
